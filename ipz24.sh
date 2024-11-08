@@ -1,7 +1,7 @@
 #!/bin/bash
 
 FLAG_FILE="initialization_flagfile"
-default_file="tcm600_nr.smi"
+default_file="eToxPred/tcm600_nr.smi"
 
 # Function to display usage
 usage() {
@@ -20,7 +20,6 @@ if [ ! -f "$FLAG_FILE" ]; then
     pip install -r requirements_etoxpred.txt
     # Download toxity prediction library
     git clone https://github.com/pulimeng/eToxPred.git
-
     cd eToxPred
     tar -xzvf etoxpred_best_model.tar.gz
     cd ..
@@ -43,7 +42,6 @@ elif [[ "$1" == "--clean" ]]; then
 elif [ $# -eq 1 ] && [ -f "$1" ]; then
     input_file=$1
     mkdir -p eToxPred
-    mv "$input_file" "eToxPred/$input_file"
 else
     input_file=$default_file
 fi
@@ -53,6 +51,7 @@ echo "Running toxicity prediction..."
 
 source venv_etoxpred/bin/activate
 echo "Using file: $input_file"
+python lipinski.py "$input_file" -o eToxPred/result_lipinski.csv 
 cd eToxPred
-python etoxpred_predict.py --datafile "$input_file" --modelfile etoxpred_best_model.joblib --outputfile ../results.csv
+python etoxpred_predict.py --datafile result_lipinski.csv --modelfile etoxpred_best_model.joblib --outputfile ../results.csv
 cd ..
