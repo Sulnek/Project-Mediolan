@@ -1,0 +1,1 @@
+from gnina/gnina:latest

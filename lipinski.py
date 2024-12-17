@@ -128,7 +128,16 @@ def main():
     args = parser.parse_args()
 
     try:
-        smiles_list = pd.read_csv(args.input_file)['smiles'].tolist()
+        df = pd.read_csv(args.input_file)
+        if 'smiles' in df:
+            smiles_list = df['smiles'].tolist()
+        elif 'Smiles' in df:
+            smiles_list = df['Smiles'].tolist()
+        elif 'SMILES' in df:
+            smiles_list = df['SMILES'].tolist()
+        else: 
+            print(f"Warning: The input file does not contain a 'smiles' column. Using the first column as 'smiles'.")
+            smiles_list = pd.read_csv(args.input_file, header=None).iloc[:, 0].tolist()
     except FileNotFoundError:
         print(f"Error: The file {args.input_file} does not exist")
         sys.exit(1)
