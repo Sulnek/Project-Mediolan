@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import re
 
-folder_path = "/content/drive/MyDrive/12-13.12 results"
+folder_path = "/."
 
 # Function to parse a .txt file and select the best result
 def analyze_txt_file(file_path):
@@ -39,7 +39,7 @@ def analyze_txt_file(file_path):
                 except (ValueError, IndexError):
                     continue
 
-    # Selecting the best result (lowest affinity, highest intramolecular, lowest CNN affinity)
+    # Selecting the best result (lowest CNN affinity, lowest affinity, highest intramolecular)
     if results:
         best_pose = min(results, key=lambda x: (x["cnn_affinity"], x["affinity"], -x["intramol"]))
 
